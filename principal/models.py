@@ -30,6 +30,16 @@ class Menu(models.Model):
         return self.description
 
 
+class MenuItem(models.Model):
+    """Modelo que define el item de un menú"""
+    business = models.ForeignKey(Business)
+    menu = models.ForeignKey(Menu)
+    description = models.CharField(max_length=150)
+
+    def __unicode__(self):
+        return self.description
+
+
 class MenuSection(models.Model):
     """Modelo que define la seccion de un menú"""
     menu = models.ForeignKey(Menu)
@@ -40,20 +50,9 @@ class MenuSection(models.Model):
         return self.description
 
 
-class MenuItem(models.Model):
-    """Modelo que define el item de un menú"""
-    business = models.ForeignKey(Business)
-    section = models.ForeignKey(MenuSection)
-    description = models.CharField(max_length=150)
-
-    def __unicode__(self):
-        return self.description
-
-
 class Branch(models.Model):
     """Modelo que define una sucursal de un negocio"""
     business = models.ForeignKey(Business)
-    items = models.ManyToManyField(MenuItem)
     name = models.CharField(max_length=200)
 
     def __unicode__(self):
