@@ -6,10 +6,10 @@
 {% block content %}
     <div><h1>Restaurante:</h1> {{ business.name }}</div>
     <div>
-        <h1>Sucursales:</h1>
+        <h1>Items:</h1>
         <ul>
-            {% for branch in business.branch_set.all %}
-                <li>{{ branch.name }}</li>
+            {% for item in business.menuitem_set.all %}
+                <li>{{ item.description }} - {{ item.menu }} {{ item.menusection_set.all }}</li>
             {% endfor %}
         </ul>
     </div>

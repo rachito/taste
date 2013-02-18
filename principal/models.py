@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class UserProfile(models.Model):
     """Perfil del usuario"""
     user = models.OneToOneField(User)
@@ -27,6 +28,12 @@ class Menu(models.Model):
     description = models.CharField(max_length=150)
 
     def __unicode__(self):
+        return self.description
+
+    def show_menu(self):
+        """Esta funcion devuelve el html del menú
+        armado
+        """
         return self.description
 
 
