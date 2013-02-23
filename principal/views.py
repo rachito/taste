@@ -6,7 +6,6 @@ from principal.models import User, Menu
 def index(request):
     business = User.objects.get(id=1).business
     m = Menu.objects.get(id=1)
-    a = m.show_menu()
 
     return render_to_response(
         'principal/index.html',

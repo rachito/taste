@@ -35,14 +35,24 @@ class Menu(models.Model):
     def __unicode__(self):
         return self.description
 
-    def show_menu(self):
-        """Esta funcion devuelve el html del menú
-        armado
-        """
-        return self.description
+
+class SortCommon(models.Model):
+    """Clase base de ordenado para cualquier objeto"""
+    def __cmp__(self, other):
+        if self.sort < other.sort:
+            return -1
+        elif self.sort > other.sort:
+            return 1
+        else:
+            return 0
+
+    sort = models.IntegerField()
+
+    class Meta:
+        abstract = True
 
 
-class MenuItem(models.Model):
+class MenuItem(SortCommon):
     """Modelo que define el item de un menú"""
     business = models.ForeignKey(Business)
     menu = models.ForeignKey(Menu)
@@ -52,7 +62,7 @@ class MenuItem(models.Model):
         return self.description
 
 
-class MenuSection(models.Model):
+class MenuSection(SortCommon):
     """Modelo que define la seccion de un menú"""
     menu = models.ForeignKey(Menu)
     items = models.ManyToManyField(MenuItem)
