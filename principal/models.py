@@ -6,6 +6,10 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
     """Perfil del usuario"""
     user = models.OneToOneField(User)
+    sex = models.CharField(max_length=1, null=True, blank=True)
+
+    def __unicode__(self):
+        return ''.join(['Profile of ', self.user.name])
 
 
 class Business(models.Model):
