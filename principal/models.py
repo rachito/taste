@@ -7,6 +7,7 @@ class UserProfile(models.Model):
     """Perfil del usuario"""
     user = models.OneToOneField(User)
     sex = models.CharField(max_length=1, null=True, blank=True)
+    accepted_eula = models.BooleanField()
 
     def __unicode__(self):
         return ''.join(['Profile of ', self.user.name])
