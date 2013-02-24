@@ -22,6 +22,15 @@ class Business(models.Model):
         return self.name
 
 
+class Branch(models.Model):
+    """Modelo que define una sucursal de un negocio"""
+    business = models.ForeignKey(Business)
+    name = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Post(models.Model):
     """Modelo que define un post de un negocio"""
     business = models.ForeignKey(Business)
@@ -70,14 +79,3 @@ class MenuSection(SortCommon):
 
     def __unicode__(self):
         return self.description
-
-
-class Branch(models.Model):
-    """Modelo que define una sucursal de un negocio"""
-    business = models.ForeignKey(Business)
-    name = models.CharField(max_length=200)
-    items = models.ManyToManyField(MenuItem)
-    exclude_items = models.ManyToManyField(MenuItem, related_name="exclude_items")
-
-    def __unicode__(self):
-        return self.name
