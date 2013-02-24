@@ -10,7 +10,7 @@ class UserProfile(models.Model):
     accepted_eula = models.BooleanField()
 
     def __unicode__(self):
-        return ''.join(['Profile of ', self.user.name])
+        return ''.join(['Profile of ', self.user.first_name])
 
 
 class Business(models.Model):
@@ -28,7 +28,7 @@ class Post(models.Model):
 
 
 class Menu(models.Model):
-    """Modelo que define un menú para el negocio"""
+    """Modelo que define un menu para el negocio"""
     business = models.ForeignKey(Business)
     description = models.CharField(max_length=150)
 
@@ -53,7 +53,7 @@ class SortCommon(models.Model):
 
 
 class MenuItem(SortCommon):
-    """Modelo que define el item de un menú"""
+    """Modelo que define el item de un menu"""
     business = models.ForeignKey(Business)
     menu = models.ForeignKey(Menu)
     description = models.CharField(max_length=150)
@@ -63,7 +63,7 @@ class MenuItem(SortCommon):
 
 
 class MenuSection(SortCommon):
-    """Modelo que define la seccion de un menú"""
+    """Modelo que define la seccion de un menu"""
     menu = models.ForeignKey(Menu)
     items = models.ManyToManyField(MenuItem)
     description = models.CharField(max_length=150)
@@ -76,6 +76,8 @@ class Branch(models.Model):
     """Modelo que define una sucursal de un negocio"""
     business = models.ForeignKey(Business)
     name = models.CharField(max_length=200)
+    items = models.ManyToManyField(MenuItem)
+    exclude_items = models.ManyToManyField(MenuItem, related_name="exclude_items")
 
     def __unicode__(self):
         return self.name
