@@ -14,5 +14,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     #principal app
-    url(r'^$', 'principal.views.index'),
+    url(r'^$', 'taste.principal.views.index'),
 )
