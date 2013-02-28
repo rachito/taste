@@ -1,5 +1,5 @@
 from django.contrib import admin
-from taste.principal.models import UserProfile, Business, Branch, Post, Menu, MenuSection, MenuItem
+from principal.models import UserProfile, Business, Branch, Post, Menu, MenuSection, MenuItem
 
 admin.site.register(UserProfile)
 admin.site.register(Business)
