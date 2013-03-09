@@ -2,16 +2,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
-class UserProfile(models.Model):
-    """Perfil del usuario"""
-    user = models.OneToOneField(User)
-    sex = models.CharField(max_length=1, null=True, blank=True)
-    accepted_eula = models.BooleanField()
-
-    def __unicode__(self):
-        return ''.join(["Profile Of ", self.user.first_name])
-
+#Constantes
+ITEMS_TYPES = (('SE', 'Section'), ('IT', 'Item'))
 
 class Business(models.Model):
     """Modelo que define a un negocio"""
@@ -36,46 +28,62 @@ class Post(models.Model):
     business = models.ForeignKey(Business)
 
 
+class Section(models.Model):
+    """Modelo que define la seccion de un menu"""
+    business = models.ForeignKey(Business)
+    description = models.CharField(max_length=150)
+    item_type = models.CharField(max_length=2, choices=ITEMS_TYPES)
+
+    def __unicode__(self):
+        return self.description
+
+
+class Item(models.Model):
+    """Modelo que define el item de un menu"""
+    business = models.ForeignKey(Business)
+    description = models.CharField(max_length=150)
+    item_type = models.CharField(max_length=2, choices=ITEMS_TYPES)
+
+    def __unicode__(self):
+        return self.description
+
+
 class Menu(models.Model):
     """Modelo que define un menu para el negocio"""
     business = models.ForeignKey(Business)
     description = models.CharField(max_length=150)
+    sections = models.ManyToManyField(Section, through='MenuSection')
+    items = models.ManyToManyField(Item, through='MenuItem')
 
     def __unicode__(self):
         return self.description
 
+    def get_structure(self):
+        """Obtiene una lista de elementos que contiene el menu, en el orden correspondiente
+        """
+        menuSections = MenuSection.objects.filter(menu=self.pk).order_by('sort')
+        menuItems = MenuItem.objects.filter(menu=self.pk).order_by('sort')
+        l = []
+        [l.append(menuItem) for menuItem in menuItems]
+        [l.append(menuSection) for menuSection in menuSections]
+        return l
 
-class SortCommon(models.Model):
-    """Clase base de ordenado para cualquier objeto"""
-    def __cmp__(self, other):
-        if self.sort < other.sort:
-            return -1
-        elif self.sort > other.sort:
-            return 1
-        else:
-            return 0
 
+class MenuSection(models.Model):
+    """Tabla muchos a muchos personalizada de las secciones de un menu"""
+    menu = models.ForeignKey(Menu)
+    section = models.ForeignKey(Section)
     sort = models.IntegerField()
 
-    class Meta:
-        abstract = True
+    def __unicode__(self):
+        return self.menu.description + " - " + self.section.description
 
 
-class MenuItem(SortCommon):
-    """Modelo que define el item de un menu"""
-    business = models.ForeignKey(Business)
+class MenuItem(models.Model):
+    """Tabla muchos a muchos perzonalizada de los items de un menu"""
     menu = models.ForeignKey(Menu)
-    description = models.CharField(max_length=150)
+    item = models.ForeignKey(Item)
+    sort = models.IntegerField()
 
     def __unicode__(self):
-        return self.description
-
-
-class MenuSection(SortCommon):
-    """Modelo que define la seccion de un menu"""
-    menu = models.ForeignKey(Menu)
-    items = models.ManyToManyField(MenuItem)
-    description = models.CharField(max_length=150)
-
-    def __unicode__(self):
-        return self.description
+        return self.menu.description + " - " + self.item.description

@@ -4,15 +4,19 @@
 {% block css %}{% endblock %}
 
 {% block content %}
-    <div><h1>Restaurante:</h1> {{ business.name }}</div>
+    <div>Usuario: {{ user.first_name}} {{user.last_name }} </div>
+    <div><h1>Restaurante:</h1> {{ user.business }}</div>
     <div>
-        <h1>Items:</h1>
+        <h1>Menus:</h1>
         <ul>
-            {% for item in business.menuitem_set.all %}
-                <li>{{ item.description }} - {{ item.menu }} {{ item.menusection_set.all }}</li>
+            {% for menu in user.business.menu_set.all %}
+                <li>
+                    {{ menu.description }}
+                    {{ menu.menuitem_set.all }}
+                    {{ menu.section_set.all }}
+                </li>
             {% endfor %}
         </ul>
     </div>
-
 {% endblock %}
 {% block js %}{% endblock %}
