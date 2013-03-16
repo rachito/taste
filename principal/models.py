@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 #Constantes
 ITEMS_TYPES = (('SE', 'Section'), ('IT', 'Item'))
 
+
 class Business(models.Model):
     """Modelo que define a un negocio"""
     name = models.CharField(max_length=150)
@@ -58,15 +59,16 @@ class Menu(models.Model):
     def __unicode__(self):
         return self.description
 
-    def get_structure(self):
+    def get_body(self):
         """Obtiene una lista de elementos que contiene el menu, en el orden correspondiente
         """
         menuSections = MenuSection.objects.filter(menu=self.pk).order_by('sort')
         menuItems = MenuItem.objects.filter(menu=self.pk).order_by('sort')
-        l = []
-        [l.append(menuItem) for menuItem in menuItems]
-        [l.append(menuSection) for menuSection in menuSections]
-        return l
+        body = []
+        body.extend(menuSections)
+        body.extend(menuItems)
+        body.sort(key=lambda item: item.sort)
+        return body
 
 
 class MenuSection(models.Model):
@@ -76,7 +78,7 @@ class MenuSection(models.Model):
     sort = models.IntegerField()
 
     def __unicode__(self):
-        return self.menu.description + " - " + self.section.description
+        return self.section.description
 
 
 class MenuItem(models.Model):
@@ -86,4 +88,4 @@ class MenuItem(models.Model):
     sort = models.IntegerField()
 
     def __unicode__(self):
-        return self.menu.description + " - " + self.item.description
+        return self.item.description

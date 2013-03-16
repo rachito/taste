@@ -5,15 +5,20 @@
 
 {% block content %}
     <div>Usuario: {{ user.first_name}} {{user.last_name }} </div>
-    <div><h1>Restaurante:</h1> {{ user.business }}</div>
+    <div><h1>Restaurante:</h1> {{ business.name }}</div>
+
+    {% comment %}Lista de menus{% endcomment %}
     <div>
         <h1>Menus:</h1>
         <ul>
-            {% for menu in user.business.menu_set.all %}
+            {% for menu in menus %}
                 <li>
                     {{ menu.description }}
-                    {{ menu.menuitem_set.all }}
-                    {{ menu.section_set.all }}
+                    <ul>
+                        {% for item in menu.get_body %}
+                            <li>imprimir item.description o lo que sea</li>
+                        {% endfor %}
+                    </ul>
                 </li>
             {% endfor %}
         </ul>
