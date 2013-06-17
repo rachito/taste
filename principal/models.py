@@ -52,22 +52,31 @@ class Menu(models.Model):
     """Modelo que define un menu para el negocio"""
     business = models.ForeignKey(Business)
     description = models.CharField(max_length=150)
+    sort = models.IntegerField()
     sections = models.ManyToManyField(Section, through='MenuSection')
     items = models.ManyToManyField(Item, through='MenuItem')
 
     def __unicode__(self):
         return self.description
 
-    def get_body(self):
+    def get_structure(self):
         """Obtiene una lista de elementos que contiene el menu, en el orden correspondiente
         """
+        body = []
+        blocks = []
         menuSections = MenuSection.objects.filter(menu=self.pk).order_by('sort')
         menuItems = MenuItem.objects.filter(menu=self.pk).order_by('sort')
-        body = []
         body.extend(menuSections)
         body.extend(menuItems)
         body.sort(key=lambda item: item.sort)
-        return body
+
+        for item in body:
+            if type(item) == MenuSection:
+                blocks.append(item.section)
+            elif type(item) == MenuItem:
+                blocks.append(item.item)
+
+        return blocks
 
 
 class MenuSection(models.Model):

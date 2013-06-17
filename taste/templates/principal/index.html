@@ -1,27 +1,26 @@
 {% extends 'base.html' %}
-{% block meta %}{% endblock %}
 {% block title %}{{ user.business.name }}{% endblock %}
-{% block css %}{% endblock %}
+{% block navbar_business_name %}{{ user.business }}{% endblock %}
 
 {% block content %}
-    <div>Usuario: {{ user.first_name}} {{user.last_name }} </div>
-    <div><h1>Restaurante:</h1> {{ business.name }}</div>
 
-    {% comment %}Lista de menus{% endcomment %}
-    <div>
-        <h1>Menus:</h1>
-        <ul>
-            {% for menu in menus %}
-                <li>
-                    {{ menu.description }}
-                    <ul>
-                        {% for item in menu.get_body %}
-                            <li>imprimir item.description o lo que sea</li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Menus</li>
+                    {% for menu in menus %}
+                        <li><a href="#">{{ menu.description }}</a></li>
+                    {% endfor %}
+                    <li class="divider"></li>
+                    <li class="nav-header">Redes sociales</li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="span10"></div>
+        </div>
     </div>
+
 {% endblock %}
 {% block js %}{% endblock %}
